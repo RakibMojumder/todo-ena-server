@@ -25,6 +25,10 @@ dbConnect();
 // Database collection
 const Todo = client.db("todos").collection("todo");
 
+app.get("/", async (req, res) => {
+  res.send("Hello from todo api");
+});
+
 // get all todos
 app.get("/api/tasks", async (req, res) => {
   try {
