@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
@@ -32,8 +32,7 @@ app.get("/", async (req, res) => {
 // get all todos
 app.get("/api/tasks", async (req, res) => {
   try {
-    const { searchTerm, priority } = req.query;
-    // let query = {};
+    const { searchTerm, priority, status } = req.query;
     let query = { isDeleted: { $ne: true } };
 
     if (searchTerm) {
@@ -46,6 +45,10 @@ app.get("/api/tasks", async (req, res) => {
 
     if (priority && priority !== "All") {
       query.priority = priority;
+    }
+
+    if (status && status !== "All") {
+      query.status = status;
     }
 
     const todos = await Todo.find(query).sort({ date: -1 }).toArray();
